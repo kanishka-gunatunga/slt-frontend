@@ -193,6 +193,8 @@ const Preview = ({ initialData, setOutput }) => {
       ".business-proposal input[type='text'], .business-proposal textarea"
     );
 
+    const hideOnPDF = document.querySelectorAll(".hide-on-pdf");
+
     const buttons = document.querySelectorAll(
       ".image-button ,.delete-btn,select"
     );
@@ -200,6 +202,10 @@ const Preview = ({ initialData, setOutput }) => {
     // Temporarily change the border color to white
     inputs.forEach((input) => {
       input.style.borderBottomColor = "white";
+    });
+
+    hideOnPDF.forEach((hideElement) => {
+      hideElement.style.display = "none";
     });
 
     buttons.forEach((button) => {
@@ -504,7 +510,7 @@ const Preview = ({ initialData, setOutput }) => {
 
         {!theImgSrc && (
           <button
-            className="image-button"
+            className="image-button hide-on-pdf"
             onClick={() => setShowOption(true)}
             style={{
               backgroundColor: "#007BFF",
@@ -520,7 +526,7 @@ const Preview = ({ initialData, setOutput }) => {
         )}
 
         {showOption && (
-          <div className="options-modal">
+          <div className="options-modal hide-on-pdf">
             <button
               onClick={() => document.getElementById("imageInput").click()}
               style={{
@@ -604,7 +610,7 @@ const Preview = ({ initialData, setOutput }) => {
         {/* Add Image Button */}
         {!imageSrc && (
           <button
-            className="image-button"
+            className="image-button hide-on-pdf"
             onClick={() => setShowOptions(true)}
             style={{
               backgroundColor: "#007BFF",
@@ -620,7 +626,7 @@ const Preview = ({ initialData, setOutput }) => {
         )}
 
         {showOptions && (
-          <div className="options-modal">
+          <div className="options-modal hide-on-pdf">
             <button
               onClick={() => document.getElementById("imageInput").click()}
               style={{
@@ -794,7 +800,7 @@ const Preview = ({ initialData, setOutput }) => {
             <br />
             <label
               htmlFor="signatureInput"
-              className="image-button"
+              className="image-button hide-on-pdf"
               style={{
                 display: "inline-block",
                 backgroundColor: "#007BFF",
@@ -808,7 +814,7 @@ const Preview = ({ initialData, setOutput }) => {
               Upload Signature
             </label>
             <input
-              className="image-button"
+              className="image-button hide-on-pdf"
               type="file"
               id="signatureInput"
               accept="image/*"
