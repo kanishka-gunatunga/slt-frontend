@@ -28,15 +28,15 @@ const Preview = ({ initialData, setOutput }) => {
   const databaseImages = [
     {
       topic: "Sample 1",
-      url: "/sample1.avif",
+      url: "/diagram1.png",
     },
     {
       topic: "Sample 2",
-      url: "/sample2.jpg",
+      url: "/diagram2.jpg",
     },
     {
       topic: "Sample 3",
-      url: "/sample3.avif",
+      url: "/diagram3.jpg",
     },
   ];
 
