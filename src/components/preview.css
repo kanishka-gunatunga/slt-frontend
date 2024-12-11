@@ -1,0 +1,157 @@
+.business-proposal {
+  font-family: "Arial", sans-serif;
+  color: #333;
+  line-height: 1.6;
+  margin: 0 auto;
+  padding: 20px;
+  max-width: 800px;
+  background-color: #fff;
+}
+
+.business-proposal section {
+  width: 210mm;
+  height: 297mm;
+  margin: 0 auto 20px auto;
+  padding: 20mm;
+  border: 1px solid #ddd;
+  box-sizing: border-box;
+  background-color: #fff;
+  page-break-after: always;
+}
+
+.business-proposal h1,
+.business-proposal h2,
+.business-proposal h3 {
+  color: #004085;
+}
+
+.business-proposal h1 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.business-proposal h2 {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.business-proposal h3 {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.business-proposal p,
+.business-proposal ul,
+.business-proposal ol {
+  margin: 10px 0;
+}
+
+.business-proposal ul,
+.business-proposal ol {
+  padding-left: 20px;
+}
+
+.business-proposal label {
+  font-weight: bold;
+}
+
+.business-proposal input[type="text"],
+.business-proposal textarea {
+  width: 100%;
+  padding: 5px;
+  border: none;
+  border-bottom: 2px dotted rgb(93, 93, 80);
+  background-color: transparent;
+  font-family: "Arial", sans-serif;
+  color: #333;
+  font-size: 16px;
+  outline: none;
+}
+
+.business-proposal input[type="text"]:focus,
+.business-proposal textarea:focus {
+  border-bottom: 2px solid #858d95;
+}
+
+.business-proposal textarea {
+  border-bottom: 2px dotted rgb(255, 255, 255);
+}
+
+.business-proposal table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.business-proposal table th,
+.business-proposal table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.business-proposal table th {
+  background-color: #f8f9fa;
+}
+
+.business-proposal a {
+  color: #004085;
+  text-decoration: none;
+}
+
+.business-proposal a:hover {
+  text-decoration: underline;
+}
+
+#terms-and-conditions {
+  width: 100%;
+}
+
+#terms-and-conditions ul {
+  list-style-type: none; /* Removes bullet points */
+  padding: 0; /* Removes default padding */
+  margin: 0; /* Removes default margin */
+}
+
+#terms-and-conditions ul p {
+  margin: 10px 0; /* Adds spacing between list items */
+}
+
+#terms-and-conditions input[type="text"] {
+  width: 100%; /* Ensures the input spans the full width of its parent */
+  min-width: 200px; /* Ensures a reasonable minimum width */
+  max-width: 100%; /* Prevents inputs from overflowing */
+  padding: 5px; /* Adds inner padding for better usability */
+  font-size: 16px; /* Keeps font size consistent */
+  box-sizing: border-box; /* Ensures padding is included in the width */
+  border: 1px solid #ddd; /* Matches other input styles */
+  border-radius: 4px; /* Optional: Adds rounded corners */
+}
+
+#terms-and-conditions {
+  width: 100%; /* Ensures the section spans the container */
+  overflow: auto; /* Allows scrolling if content overflows */
+}
+
+.text-box {
+  width: 100%;
+  min-height: 100px; /* Matches the input width */
+  height: auto; /* Prevents unnecessary constraints */
+}
+
+.requirements {
+  margin: 20px 0;
+}
+.dropdown {
+  margin: 10px 0;
+  padding: 8px;
+}
+.text-box {
+  width: 100%;
+  height: 80px;
+  padding: 10px;
+  margin-top: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
