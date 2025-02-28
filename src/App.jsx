@@ -92,7 +92,7 @@ function App() {
           {error && <p className="error">{error}</p>}
           <section className="preview">
             {output ? (
-              <Preview initialData={output} setOutput={setOutput} />
+              <Preview initialData={JSON.stringify(output)} setOutput={setOutput} />
             ) : (
               <p className="content">
                 No data available. Please upload a file.
