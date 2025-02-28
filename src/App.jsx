@@ -41,7 +41,9 @@ function App() {
         }
       );
 
+      console.log("response : ",response)
       let theData = response.data;
+      console.log("theData : ",theData)
 
       if (theData) {
         setOutput(JSON.parse(theData));
@@ -92,7 +94,7 @@ function App() {
           {error && <p className="error">{error}</p>}
           <section className="preview">
             {output ? (
-              <Preview initialData={JSON.stringify(output)} setOutput={setOutput} />
+              <Preview initialData={output} setOutput={setOutput} />
             ) : (
               <p className="content">
                 No data available. Please upload a file.
