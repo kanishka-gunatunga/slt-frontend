@@ -258,7 +258,7 @@ const Preview = ({ initialData, setOutput }) => {
           style={{ width: 250 }}
           type="text"
           className="customerName"
-          value={data.customerName}
+          value={data.customerName || ''}
           onChange={(e) => handleInputChange("customerName", e.target.value)}
         />
         <br />
@@ -267,7 +267,7 @@ const Preview = ({ initialData, setOutput }) => {
           style={{ width: 250 }}
           type="text"
           className="referenceNumber"
-          value={data.referenceNumber}
+          value={data.referenceNumber || ''}
           onChange={(e) => handleInputChange("referenceNumber", e.target.value)}
         />
       </section>
@@ -298,7 +298,7 @@ const Preview = ({ initialData, setOutput }) => {
               style={{ width: 250 }}
               type="text"
               className="customerName"
-              value={data.customerName}
+              value={data.customerName || ''}
               onChange={(e) =>
                 handleInputChange("customerName", e.target.value)
               }
@@ -311,7 +311,7 @@ const Preview = ({ initialData, setOutput }) => {
               style={{ width: 250 }}
               type="text"
               className="designation"
-              value={data.designation}
+              value={data.designation || ''}
               onChange={(e) => handleInputChange("designation", e.target.value)}
             />
           </strong>
@@ -322,7 +322,7 @@ const Preview = ({ initialData, setOutput }) => {
               style={{ width: 250 }}
               type="text"
               className="companyName"
-              value={data.companyName}
+              value={data.companyName || ''}
               onChange={(e) => handleInputChange("companyName", e.target.value)}
             />
           </strong>
@@ -333,7 +333,7 @@ const Preview = ({ initialData, setOutput }) => {
               style={{ width: 250 }}
               type="text"
               className="addressLine"
-              value={data.addressLine}
+              value={data.addressLine || ''}
               onChange={(e) => handleInputChange("addressLine", e.target.value)}
             />
           </strong>
@@ -341,7 +341,7 @@ const Preview = ({ initialData, setOutput }) => {
           {/* {formData.addressLine2} */}
         </p>
         <p>Dear Sir/Madam,</p>
-        <h2>Business Proposal for {initialData.customerName}</h2>
+        <h2>Business Proposal for {initialData.customerName || ''}</h2>
         <p>
           We understand that every organisation needs to create an edge to
           succeed in the current complex business environment and how technology
@@ -359,22 +359,24 @@ const Preview = ({ initialData, setOutput }) => {
         </p>
         <p>
           We are pleased to submit the attached proposal for
-          {data.solutionBOQ[0].Item}. Our proposal briefs on
+          {data.solutionBOQ && data.solutionBOQ[0] && data.solutionBOQ[0].Item}
+  . Our proposal briefs on
           {
             <>
               {/* Dropdown for selecting description */}
               {
                 <select
                   className="dropdown"
-                  value={selectedOption}
-                  onChange={handleTextDropdownChange}
+                  value={selectedOption || ''}
+                  // onChange={handleTextDropdownChange}
+                  onChange={(e) => handleTextDropdownChange(e)}
                 >
                   <option value="" disabled>
                     Select an option
                   </option>
                   {options.map((option) => (
-                    <option key={option.type} value={option.type}>
-                      {option.type}
+                    <option key={option.type} value={option.type || ''}>
+                      {option.type || ''}
                     </option>
                   ))}
                 </select>
@@ -382,7 +384,7 @@ const Preview = ({ initialData, setOutput }) => {
               <textarea
                 className="text-box"
                 placeholder="................................................................................................................................................................................................................................................................................................................................................................................................................................................"
-                value={data.ProjectScope}
+                value={data.ProjectScope || ''}
                 onChange={(e) =>
                   handleInputChange("ProjectScope", e.target.value)
                 }
@@ -393,8 +395,8 @@ const Preview = ({ initialData, setOutput }) => {
         </p>
         <p>
           We look forward to discussing the proposal in detail. Do not hesitate
-          to reach out to {initialData.contactName} on{" "}
-          {initialData.contactNumber} should you require any assistance.
+          to reach out to {initialData.contactName || ''} on{" "}
+          {initialData.contactNumber || ''} should you require any assistance.
         </p>
         <p>
           We are committed to partnering with you in your journey to success and
@@ -478,7 +480,7 @@ const Preview = ({ initialData, setOutput }) => {
               <select
                 id="requirementDropdown"
                 className="dropdown"
-                value={selectedRequirement} // Updated state variable
+                value={selectedRequirement || ''} // Updated state variable
                 onChange={(e) => {
                   const selectedValue = e.target.value;
                   setSelectedRequirement(selectedValue); // Updated function
@@ -492,7 +494,7 @@ const Preview = ({ initialData, setOutput }) => {
                   Select an option
                 </option>
                 {sampleOptions.map((option) => (
-                  <option key={option.type} value={option.type}>
+                  <option key={option.type} value={option.type || ''}>
                     {option.type}
                   </option>
                 ))}
@@ -502,7 +504,7 @@ const Preview = ({ initialData, setOutput }) => {
           <textarea
             id="requirementTextarea"
             className="text-box"
-            value={requirementText} // Updated state variable
+            value={requirementText || ''} // Updated state variable
             onChange={(e) => updateRequirementText(e.target.value)} // Updated function
             placeholder="Type your requirement here..."
           />
@@ -555,8 +557,8 @@ const Preview = ({ initialData, setOutput }) => {
             >
               <option value="">Select from Database</option>
               {databaseImages.map((image, index) => (
-                <option key={index} value={image.topic}>
-                  {image.topic}
+                <option key={index} value={image.topic || ''}>
+                  {image.topic || ''}
                 </option>
               ))}
             </select>
@@ -655,7 +657,7 @@ const Preview = ({ initialData, setOutput }) => {
             >
               <option value="">Select from Database</option>
               {databaseImages.map((image, index) => (
-                <option key={index} value={image.topic}>
+                <option key={index} value={image.topic || ''}>
                   {image.topic}
                 </option>
               ))}
@@ -700,7 +702,7 @@ const Preview = ({ initialData, setOutput }) => {
         {renderEditableTable(initialData.optionalItems, "optionalItems")}
       </section>
 
-      <section id="terms-and-conditions">
+      {/* <section id="terms-and-conditions">
         <h2>Terms & Conditions</h2>
         <p>{data.termsAndConditions[1]}</p>
         <p>{data.termsAndConditions[2]}</p>
@@ -716,7 +718,27 @@ const Preview = ({ initialData, setOutput }) => {
           <p>{data.termsAndConditions[8]}</p>
           <p>{data.termsAndConditions[9]}</p>
         </section>
-      )}
+      )} */}
+
+<section id="terms-and-conditions">
+  <h2>Terms & Conditions</h2>
+  {data.termsAndConditions.map((term, index) => {
+    if (typeof term === "string") {
+      return <p key={index}>{term}</p>;
+    } else if (typeof term === "object" && term !== null) {
+      return Object.entries(term).map(([key, values]) => (
+        <div key={key}>
+          <h3>{key}</h3>
+          <ul>
+            {Array.isArray(values) &&
+              values.map((item, i) => <li key={i}>{item}</li>)}
+          </ul>
+        </div>
+      ));
+    }
+    return null;
+  })}
+</section>
 
       <section id="customer-acknowledgements">
         <h2>Customer Acknowledgements</h2>
@@ -737,7 +759,7 @@ const Preview = ({ initialData, setOutput }) => {
           <strong>Company Name:</strong>
           <input
             type="text"
-            value={companyName}
+            value={companyName || ''}
             onChange={(e) => setCompanyName(e.target.value)}
             style={{
               border: "none",
@@ -750,7 +772,7 @@ const Preview = ({ initialData, setOutput }) => {
           <strong>Address:</strong>
           <input
             type="text"
-            value={address}
+            value={address || ''}
             onChange={(e) => setAddress(e.target.value)}
             style={{
               border: "none",
@@ -763,7 +785,7 @@ const Preview = ({ initialData, setOutput }) => {
           <strong>Solution:</strong>
           <input
             type="text"
-            value={solution}
+            value={solution || ''}
             onChange={(e) => setSolution(e.target.value)}
             style={{
               border: "none",
@@ -776,7 +798,7 @@ const Preview = ({ initialData, setOutput }) => {
           <strong>Initial & Monthly Charges:</strong>
           <input
             type="text"
-            value={charges}
+            value={charges || ''}
             onChange={(e) => setCharges(e.target.value)}
             style={{
               border: "none",
