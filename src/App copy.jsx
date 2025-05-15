@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { useState } from "react";
 import axios from "axios";
 import Preview from "./components/Preview";
@@ -7,24 +6,28 @@ import "./App.css";
 
 function App() {
   const [file, setFile] = useState(null);
-    const [files, setFiles] = useState([]);
   const [output, setOutput] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [files, setFiles] = useState([]);
+  const [allData, setAllData] = useState([]);
+
 
   // const handleFileInput = (e) => {
   //   setFile(e.target.files[0]);
   //   setOutput(null);
   //   setError(null);
   // };
+
   const handleFileInput = (e) => {
     setFiles(Array.from(e.target.files));
     setOutput(null);
     setError(null);
   };
+
 
   const handleInput = async () => {
     setLoading(true);
@@ -39,7 +42,7 @@ function App() {
     try {
       const formData = new FormData();
       // formData.append("file", file);
-       files.forEach((file) => {
+      files.forEach((file) => {
         formData.append("files", file);
       });
 
@@ -51,9 +54,18 @@ function App() {
         }
       );
 
-      console.log("response : ",response)
+      // console.log("response : ", response)
       let theData = response.data;
-      console.log("theData : ",theData)
+      // console.log("theData : ", theData)
+
+      let cleaned = theData.replace(/```json|```/g, '').trim();
+
+      
+      // console.log("solutionBOQs : ", cleaned);
+      let theDataAll = JSON.parse(cleaned);
+      setAllData(cleaned);
+      console.log(theDataAll);
+      console.log("theDataAll : ", theDataAll.solutionBOQs)
 
       if (theData) {
         setOutput(JSON.parse(theData));
@@ -79,6 +91,7 @@ function App() {
     }
   };
 
+  
   return (
     <div className="main-container">
       {isAuthenticated ? (
@@ -103,6 +116,7 @@ function App() {
                 multiple
                 onChange={handleFileInput}
               />
+
             </label>
           </div>
           <button onClick={handleInput} disabled={loading}>
@@ -111,7 +125,7 @@ function App() {
           {error && <p className="error">{error}</p>}
           <section className="preview">
             {output ? (
-              <Preview initialData={output} setOutput={setOutput} />
+              <Preview initialData={allData} setOutput={setAllData} />
             ) : (
               <p className="content">
                 No data available. Please upload a file.
@@ -146,6 +160,7 @@ function App() {
           </form>
         </div>
       )}
+      <p>{allData}</p>
     </div>
   );
 }

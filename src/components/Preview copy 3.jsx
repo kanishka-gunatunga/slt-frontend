@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import jsPDF from "jspdf";
 import { MdDeleteOutline } from "react-icons/md";
 import html2canvas from "html2canvas";
 import "./preview.css";
 
-const Preview = ({ initialData, setOutput }) => {
+const Preview = ({ allData, initialData, setOutput }) => {
   const [data, setData] = useState(initialData);
   const [imageSrc, setImageSrc] = useState(null);
   const [theImgSrc, setTheImgSrc] = useState(null);
@@ -21,6 +21,7 @@ const Preview = ({ initialData, setOutput }) => {
   const [selectedRequirement, setSelectedRequirement] = useState("");
   const [requirementText, setRequirementText] = useState("");
 
+  // handle requirement change section
   const updateRequirementText = (newText) => {
     setRequirementText(newText);
   };
@@ -51,6 +52,7 @@ const Preview = ({ initialData, setOutput }) => {
     { type: "sample3", description: "Additional sample for selection" },
   ];
 
+  // handle signature upload
   const handleSignatureChange = (e) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
@@ -61,6 +63,8 @@ const Preview = ({ initialData, setOutput }) => {
       reader.readAsDataURL(file);
     }
   };
+
+  // handle image select - solution diagram
   const handleImageChange = (e) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
@@ -72,6 +76,7 @@ const Preview = ({ initialData, setOutput }) => {
     }
   };
 
+  // handle image select - requirement section
   const handleOtherImageChange = (e) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
@@ -83,16 +88,19 @@ const Preview = ({ initialData, setOutput }) => {
     }
   };
 
+  // handle dropdowns - select image from DB - requirement section
   const handleDatabaseImageSelect = (url) => {
     setImageSrc(url);
     setShowOptions(false);
   };
 
+  // handle dropdowns - select image from DB - solution diagram
   const handleOtherDatabaseImageSelect = (url) => {
     setTheImgSrc(url);
     setShowOption(false);
   };
 
+  // handle text dropdown - introduction
   const handleTextDropdownChange = (e) => {
     const selectedType = e.target.value;
     setSelectedOption(selectedType);
@@ -104,16 +112,19 @@ const Preview = ({ initialData, setOutput }) => {
     }
   };
 
+  // clear selected image - add image - solution diagram
   function clearImage() {
     setImageSrc(null);
     setShowOptions(false);
   }
 
+  // clear selected image - add image - requirement section
   function clearOtherImage() {
     setTheImgSrc(null);
     setShowOption(false);
   }
 
+  // handle dropdowns - add image - solution diagram
   const handleDropdownChange = (e) => {
     const selectedImage = databaseImages.find(
       (img) => img.topic === e.target.value
@@ -123,6 +134,7 @@ const Preview = ({ initialData, setOutput }) => {
     }
   };
 
+  // handle dropdowns - add image - requirement section
   const handleOtherDropdownChange = (e) => {
     const selectedImage = databaseImages.find(
       (img) => img.topic === e.target.value
@@ -131,6 +143,7 @@ const Preview = ({ initialData, setOutput }) => {
       handleOtherDatabaseImageSelect(selectedImage.url);
     }
   };
+  // handle editable inputs
   const handleInputChange = (field, value) => {
     setData((prev) => ({
       ...prev,
@@ -138,6 +151,7 @@ const Preview = ({ initialData, setOutput }) => {
     }));
   };
 
+  // table cell edit
   const handleEditChange = (section, index, key, value) => {
     setOutput((prev) => {
       const updated = { ...prev };
@@ -148,49 +162,11 @@ const Preview = ({ initialData, setOutput }) => {
     });
   };
 
-  // const renderEditableTable = (data, sectionName) => {
-  //   return (
-  //     <div>
-  //       <h3>{sectionName}</h3>
-  //       <table>
-  //         <thead>
-  //           <tr>
-  //             {Object.keys(data[0]).map((key) => (
-  //               <th key={key}>{key}</th>
-  //             ))}
-  //           </tr>
-  //         </thead>
-  //         <tbody>
-  //           {data.map((item, index) => (
-  //             <tr key={index}>
-  //               {Object.keys(item).map((key) => (
-  //                 <td key={key}>
-  //                   <input
-  //                     type="text"
-  //                     value={item[key] || ""}
-  //                     onChange={(e) =>
-  //                       handleEditChange(
-  //                         sectionName,
-  //                         index,
-  //                         key,
-  //                         e.target.value
-  //                       )
-  //                     }
-  //                   />
-  //                 </td>
-  //               ))}
-  //             </tr>
-  //           ))}
-  //         </tbody>
-  //       </table>
-  //     </div>
-  //   );
-  // };
-  const renderEditableTable = (data, sectionPath) => {
-    if (!data || data.length === 0) return null;
-
+  const renderEditableTable = (data, sectionName) => {
+    console.log("DATA ::: ", data);
     return (
       <div>
+        <h3>{sectionName}</h3>
         <table>
           <thead>
             <tr>
@@ -200,17 +176,37 @@ const Preview = ({ initialData, setOutput }) => {
             </tr>
           </thead>
           <tbody>
-            {data.map((item, index) => (
-              <tr key={index}>
+            {data.map((item, rowIndex) => (
+              <tr key={rowIndex}>
                 {Object.keys(item).map((key) => (
-                  <td key={key}>
-                    <input
-                      type="text"
-                      value={item[key] || ""}
-                      onChange={(e) =>
-                        handleEditChange(sectionPath, index, key, e.target.value)
-                      }
-                    />
+                  <td key={`${key}-${rowIndex}`}>
+                    {key === "Item" ? (
+                      <textarea
+                        value={item[key] ?? ""}
+                        onChange={(e) =>
+                          handleEditChange(
+                            sectionName,
+                            rowIndex,
+                            key,
+                            e.target.value
+                          )
+                        }
+                        style={{ width: "100%", height: "100px" }}
+                      />
+                    ) : (
+                      <input
+                        type="text"
+                        value={item[key] ?? ""}
+                        onChange={(e) =>
+                          handleEditChange(
+                            sectionName,
+                            rowIndex,
+                            key,
+                            e.target.value
+                          )
+                        }
+                      />
+                    )}
                   </td>
                 ))}
               </tr>
@@ -220,8 +216,7 @@ const Preview = ({ initialData, setOutput }) => {
       </div>
     );
   };
-
-
+  // generate PDF
   const generatePDF = async () => {
     // Select all the input and textarea elements to change the border color
     const inputs = document.querySelectorAll(
@@ -280,12 +275,16 @@ const Preview = ({ initialData, setOutput }) => {
     // Save the PDF
     doc.save("business-proposal.pdf");
   };
+  console.log("data preview : ", initialData)
 
   return (
     <div className="business-proposal">
       <button onClick={generatePDF} style={{ marginBottom: "20px" }}>
         Generate PDF
       </button>
+      {/* ============================================ */}
+      {/* pdf view */}
+      {/* cover page */}
       <section id="cover-page">
         <h2>Cover Page</h2>
         <label htmlFor="customerName">Business Proposal for</label>
@@ -306,6 +305,8 @@ const Preview = ({ initialData, setOutput }) => {
           onChange={(e) => handleInputChange("referenceNumber", e.target.value)}
         />
       </section>
+
+      {/* table of content page */}
       <section id="contents">
         <h2>Contents</h2>
         <p>A table of contents listing all sections of the proposal:</p>
@@ -323,6 +324,8 @@ const Preview = ({ initialData, setOutput }) => {
           <li>Contact Us - Page 15</li>
         </ul>
       </section>
+
+      {/* introduction page */}
       <section className="introduction">
         <h1>Enterprise Business Proposal</h1>
         <p>{new Date().toISOString().split("T")[0]}</p>
@@ -398,7 +401,6 @@ const Preview = ({ initialData, setOutput }) => {
           . Our proposal briefs on
           {
             <>
-              {/* Dropdown for selecting description */}
               {
                 <select
                   className="dropdown"
@@ -425,8 +427,7 @@ const Preview = ({ initialData, setOutput }) => {
                 }
               />
             </>
-          }
-          .
+          }.
         </p>
         <p>
           We look forward to discussing the proposal in detail. Do not hesitate
@@ -486,7 +487,6 @@ const Preview = ({ initialData, setOutput }) => {
           participation in the global digital economy.
         </p>
       </section>
-
       <section id="our-strengths">
         <h2>Our Strengths</h2>
         <p>
@@ -495,12 +495,10 @@ const Preview = ({ initialData, setOutput }) => {
         </p>
         <img src="/proposal.png" style={{ width: 640 }} alt="Strengths" />
       </section>
-
       <section id="why-with-us">
         <h2>Why with Us</h2>
         <img src="/diagram.png" style={{ width: 640 }} alt="Strengths" />
       </section>
-
       <section className="requirements">
         <h2>Requirements Section</h2>
         <p>
@@ -515,14 +513,14 @@ const Preview = ({ initialData, setOutput }) => {
               <select
                 id="requirementDropdown"
                 className="dropdown"
-                value={selectedRequirement || ''} // Updated state variable
+                value={selectedRequirement || ''}
                 onChange={(e) => {
                   const selectedValue = e.target.value;
-                  setSelectedRequirement(selectedValue); // Updated function
+                  setSelectedRequirement(selectedValue);
                   const foundDescription = sampleOptions.find(
                     (option) => option.type === selectedValue
-                  )?.description; // Match description
-                  updateRequirementText(foundDescription || ""); // Updated function
+                  )?.description;
+                  updateRequirementText(foundDescription || "");
                 }}
               >
                 <option value="" disabled>
@@ -539,8 +537,8 @@ const Preview = ({ initialData, setOutput }) => {
           <textarea
             id="requirementTextarea"
             className="text-box"
-            value={requirementText || ''} // Updated state variable
-            onChange={(e) => updateRequirementText(e.target.value)} // Updated function
+            value={requirementText || ''}
+            onChange={(e) => updateRequirementText(e.target.value)}
             placeholder="Type your requirement here..."
           />
         </div>
@@ -561,7 +559,6 @@ const Preview = ({ initialData, setOutput }) => {
             Add Image
           </button>
         )}
-
         {showOption && (
           <div className="options-modal hide-on-pdf">
             <button
@@ -599,8 +596,6 @@ const Preview = ({ initialData, setOutput }) => {
             </select>
           </div>
         )}
-
-        {/* Hidden file input */}
         <input
           type="file"
           id="imageInput"
@@ -608,8 +603,6 @@ const Preview = ({ initialData, setOutput }) => {
           style={{ display: "none" }}
           onChange={handleOtherImageChange}
         />
-
-        {/* Display the uploaded image */}
         <div style={{ marginTop: "20px" }}>
           {theImgSrc && (
             <MdDeleteOutline className="delete-btn" onClick={clearOtherImage} />
@@ -627,16 +620,6 @@ const Preview = ({ initialData, setOutput }) => {
           )}
         </div>
       </section>
-
-      {/* <section id="proposed-solution">
-        <h2>Proposed Solution</h2>
-        <p>
-          Includes an overview of the proposed network architecture and other
-          technical solutions. This section can have diagrams or predefined
-          templates.
-        </p>
-      </section> */}
-
       <section id="solution-diagram">
         <h2>Solution Diagram</h2>
         <p>
@@ -727,45 +710,21 @@ const Preview = ({ initialData, setOutput }) => {
           )}
         </div>
       </section>
-      {/* <section id="your-investment">
-        <h2>Your Investment</h2> */}
-      {/* {renderEditableTable(initialData.solutionBOQ, "solutionBOQ")} */}
       <section id="your-investment">
         <h2>Your Investment</h2>
+        {/* {renderEditableTable(initialData.solutionBOQ, "solutionBOQ")} */}
         {initialData.solutionBOQs.map((boq, index) => (
           <div key={index}>
-            <h3>{boq.source}</h3>
-            {renderEditableTable(boq.items, `solutionBOQs[${index}].items`)}
+            <h2>{boq.source}</h2>
+            {renderEditableTable(boq.items, `solutionBOQ-${index}`)}
           </div>
         ))}
       </section>
-
-      {/* </section> */}
-
       <section>
         <h2>Optional items</h2>
         {renderEditableTable(initialData.optionalItems, "optionalItems")}
       </section>
-
-      {/* <section id="terms-and-conditions">
-        <h2>Terms & Conditions</h2>
-        <p>{data.termsAndConditions[1]}</p>
-        <p>{data.termsAndConditions[2]}</p>
-        <p>{data.termsAndConditions[3]}</p>
-        <p>{data.termsAndConditions[4]}</p>
-        <p>{data.termsAndConditions[5]}</p>
-        <p>{data.termsAndConditions[6]}</p>
-        <p>{data.termsAndConditions[7]}</p>
-      </section>
-      {data.termsAndConditions.length > 6 && (
-        <section id="other-remarks">
-          <h2>Other Remarks</h2>
-          <p>{data.termsAndConditions[8]}</p>
-          <p>{data.termsAndConditions[9]}</p>
-        </section>
-      )} */}
-
-      <section id="terms-and-conditions" style={{overflowY: "auto !important"}}>
+      <section id="terms-and-conditions">
         <h2>Terms & Conditions</h2>
         {data.termsAndConditions.map((term, index) => {
           if (typeof term === "string") {
@@ -784,7 +743,6 @@ const Preview = ({ initialData, setOutput }) => {
           return null;
         })}
       </section>
-
       <section id="customer-acknowledgements">
         <h2>Customer Acknowledgements</h2>
         <p>
@@ -912,7 +870,6 @@ const Preview = ({ initialData, setOutput }) => {
           </span>
         </p>
       </section>
-
       <section id="sme-solutions">
         <h2>SME Solutions</h2>
         <p>
@@ -965,7 +922,6 @@ const Preview = ({ initialData, setOutput }) => {
           in the digital marketing landscape with SLT-MOBITEL.{" "}
         </p>
       </section>
-
       <section id="awards-and-accolades">
         <h2>Awards and Accolades</h2>
         <p>
@@ -978,7 +934,6 @@ const Preview = ({ initialData, setOutput }) => {
           style={{ width: 640 }}
         />
       </section>
-
       <section id="contact-us">
         <h2>Contact Us</h2>
         <p>
