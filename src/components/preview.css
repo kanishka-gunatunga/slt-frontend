@@ -17,6 +17,7 @@
   box-sizing: border-box;
   background-color: #fff;
   page-break-after: always;
+      overflow-y: auto;
 }
 
 .business-proposal h1,
