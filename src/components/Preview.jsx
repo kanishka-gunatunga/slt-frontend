@@ -730,7 +730,7 @@ const Preview = ({ initialData, setOutput }) => {
       {/* <section id="your-investment">
         <h2>Your Investment</h2> */}
       {/* {renderEditableTable(initialData.solutionBOQ, "solutionBOQ")} */}
-      <section id="your-investment">
+      <section id="your-investment" style={{overflowY: "auto !important"}}>
         <h2>Your Investment</h2>
         {initialData.solutionBOQs.map((boq, index) => (
           <div key={index}>
