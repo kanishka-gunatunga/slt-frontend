@@ -44,7 +44,7 @@ function App() {
       });
 
       const response = await axios.post(
-        "http://localhost:3005/upload",
+        "https://slt-backend-omega.vercel.app/upload",
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },
