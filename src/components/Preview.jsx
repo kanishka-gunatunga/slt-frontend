@@ -138,15 +138,15 @@ const Preview = ({ initialData, setOutput }) => {
     }));
   };
 
-  const handleEditChange = (section, index, key, value) => {
-    setOutput((prev) => {
-      const updated = { ...prev };
-      if (section === "solutionBOQ" || section === "optionalItems") {
-        updated[section][index][key] = value;
-      }
-      return updated;
-    });
-  };
+  // const handleEditChange = (section, index, key, value) => {
+  //   setOutput((prev) => {
+  //     const updated = { ...prev };
+  //     if (section === "solutionBOQ" || section === "optionalItems") {
+  //       updated[section][index][key] = value;
+  //     }
+  //     return updated;
+  //   });
+  // };
 
   // const renderEditableTable = (data, sectionName) => {
   //   return (
@@ -186,6 +186,26 @@ const Preview = ({ initialData, setOutput }) => {
   //     </div>
   //   );
   // };
+
+  const updateNestedValue = (obj, path, index, key, value) => {
+  const keys = path.replace(/\[(\d+)\]/g, '.$1').split('.');
+  const lastKey = keys.pop();
+  const target = keys.reduce((acc, k) => acc && acc[k], obj);
+
+  if (target && Array.isArray(target[lastKey])) {
+    target[lastKey][index][key] = value;
+  }
+};
+
+const handleEditChange = (sectionPath, index, key, value) => {
+  setOutput((prev) => {
+    const updated = JSON.parse(JSON.stringify(prev)); 
+    updateNestedValue(updated, sectionPath, index, key, value);
+    return updated;
+  });
+};
+
+
   const renderEditableTable = (data, sectionPath) => {
     if (!data || data.length === 0) return null;
 
